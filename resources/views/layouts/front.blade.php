@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>ဈေးဗန်း -Shop in One Place</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>ဈေးဗန်း - Shop in one place</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -27,15 +28,13 @@
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                               @php 
-                                  $categories = \App\Models\Category::all();
+                                @php 
+                                    $categories = \App\Models\Category::all();
                                 @endphp
-                               
+
                                 @foreach($categories as $category)
-                                <li><a class="dropdown-item" href="{{route('items.category', $category->id)}}">{{$category->name}}</a></li>
+                                    <li><a class="dropdown-item" href="{{route('items.category', $category->id)}}">{{$category->name}}</a></li>
                                 @endforeach
-
-
                             </ul>
                         </li>
                     </ul>
@@ -46,73 +45,41 @@
                             <span class="badge bg-dark text-white ms-1 rounded-pill" id="item-count">0</span>
                         </a>
                     </form>
-
                     @guest
-                    @if (Route::has('login'))
-                        <a class="btn mx-3" href="{{ route('login') }}">
-                            {{ __('Login') }}
-                        </a>
-                    @endif
-
-                    @if (Route::has('register'))
-                        <a class="btn btn-dark" href="{{ route('register') }}">
-                            {{ __('Register') }}
-                        </a>
-                    @endif
-
-                @else
-                    <li class="nav-item dropdown mx-3">
-                        <a id="navbarDropdown"
-                        class="nav-link dropdown-toggle"
-                        href="#"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        v-pre>
-
-                            {{ Auth::user()->name }}
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="navbarDropdown">
-
-                            @if(Auth::user()->role == 'user')
-                                <a class="dropdown-item" href="#">
-                                    Profile
-                                </a>
-                            @else
-                                <a class="dropdown-item" href="/admin">
-                                    Admin Panel
-                                </a>
-                            @endif
-
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item"
-                            href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
-
-                                {{ __('Logout') }}
+                        <a href="/login" class="btn mx-3">Login</a>
+                        <a href="/register" class="btn btn-dark">Register</a>
+                    @else 
+                        <div class="dropdown mx-3">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{Auth::user()->name}}
                             </a>
+                            <ul class="dropdown-menu">
+                                @if(Auth::user()->role == 'user')
+                                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                                @else 
+                                    <li><a class="dropdown-item" href="/admin">Admin Panel</a></li>
+                                @endif
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
 
-                            <form id="logout-form"
-                                action="{{ route('logout') }}"
-                                method="POST"
-                                class="d-none">
-                                @csrf
-                            </form>
-
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </li>
+                            </ul>
                         </div>
-                    </li>
-                @endguest
+                    @endif
                 </div>
             </div>
         </nav>
-  
-        @yield('content')
 
+        @yield('content')
+        
         <!-- Footer-->
         <footer class="py-5 bg-dark mt-auto">
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
@@ -121,11 +88,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{{asset('front-asset/js/scripts.js')}}"></script>
-
         <!-- for cart -->
         <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
         <script src="{{asset('front-asset/js/cart.js')}}"></script>
-
-
+        @yield('script')
     </body>
 </html>

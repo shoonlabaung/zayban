@@ -37,7 +37,7 @@ class UserController extends Controller
         'phone' => $request->phone,
         'profile' => 'image.jpg',
         'email' => $request->email,
-        'password' => bcrypt($request->password),
+        'password' => Hash::make($request->password),
         'role' => $request->role,
     ]);
 
